@@ -20,6 +20,7 @@ def readImgText(img, tesseractEnginePath):
 if __name__ == '__main__':
 	img = cv2.imread("%stest/testocr.png" % img_path , 0)
 
+	tesseractpath = "C:\\Program Files (x86)\\Tesseract-OCR"
 	text = pytesseract.image_to_string(img)
 
 	print(text)
