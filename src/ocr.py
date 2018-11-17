@@ -3,6 +3,7 @@ import cv2
 import pytesseract
 
 img_path = "../res/images/"
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe"
 
 '''
 * readImgText takes a read cv2 image as an input, and a path to
@@ -17,10 +18,13 @@ def readImgText(img, tesseractEnginePath):
 	text = pytesseract.image_to_string(img)
 	return text
 
-if __name__ == '__main__':
-	img = cv2.imread("%stest/testocr.png" % img_path , 0)
 
-	tesseractpath = "C:\\Program Files (x86)\\Tesseract-OCR"
+
+if __name__ == '__main__':
+
+
+	img = cv2.imread("%sknuckles.JPG" % img_path , 0)
+
 	text = pytesseract.image_to_string(img)
 
 	print(text)
