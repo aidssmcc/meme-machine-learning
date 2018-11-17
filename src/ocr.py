@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import pytesseract
-from pathlib import Path
+import sys
 
 IMG_BASE_PATH = "../res/images/"
 
@@ -26,21 +26,39 @@ def readImgText(img, tesseractEnginePath):
 * The image processed and returns an opened opencv image.
 '''
 def preprocessImage(imgPath, mode):
+    # print(imgPath)
+    # Open image
     img = cv2.imread("%s%s" % (IMG_BASE_PATH, imgPath))
-
-    # Convert to grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
     # if img.empty():
     #   raise InvalidInput("Invalid Input")
     # return img
 
-    # Thresh bin for black text
+    # Rescale
+    width, height = img.shape[:2]
+    if width < 300 and width < height:
+        newWidth = 300
+        newHeight = int((300 / float(width)) * height)
+        img = cv2.resize(img, None, (newWidth,newHeight))
+    elif height < 300:
+        newHeight = 300
+        newWidth = int((300 / float(height)) * width)
+        img = cv2.resize(img, None, (newWidth,newHeight))
+
+    # grayscale and binarization
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
     if mode == "black":
-        ret,thresh = cv2.threshold(gray,240,255,cv2.THRESH_BINARY)
+        ret,thresh = cv2.threshold(gray,240,255,cv2.THRESH_BINARY)  # 240
     elif mode == "white":
         ret,thresh = cv2.threshold(gray,240,255,cv2.THRESH_BINARY_INV)
-    thresh = cv2.dilate(thresh, None, iterations=1)
+
+    # Noise Reduction
+    thresh = cv2.fastNlMeansDenoising(thresh, None, h=50)
+
+    # Remove borders/excess stuff
+
+
+    
     cv2.namedWindow('image', cv2.WINDOW_NORMAL)
     cv2.imshow('image',thresh)
     cv2.waitKey(0)
@@ -49,18 +67,22 @@ def preprocessImage(imgPath, mode):
     return thresh
 
 if __name__ == '__main__':
-    # img = preprocessImage("test/testocr.png")
-    # img = preprocessImage("test/pika.jpg", "black")
+    # load_system_dawg and load_freq_dawg to false
+    img = preprocessImage(sys.argv[1], sys.argv[2])
+    text = readImgText(img, "")
+    print("Black text\n" + text)
 
-    for file in Path(IMG_BASE_PATH + "test"):
-        # filename = os.fsdecode(file)
-        img = preprocessImage("%s" % str(file), "white")
-        text = readImgText(img, "")
-        print("Black text\n" + text)
+    # img = preprocessImage("test/meme2.jpg", "white")
+    # text = readImgText(img, "")
+    # print("White text\n" + text)
 
-        img = preprocessImage("%s" % str(file), "black")
-        text = readImgText(img, "")
-        print("White text\n" + text)
+    # img = preprocessImage("test/meme3.jpg", "white")
+    # text = readImgText(img, "")
+    # print("White text\n" + text)
+    
+    # img = preprocessImage("test/meme4.jpg", "white")
+    # text = readImgText(img, "")
+    # print("White text\n" + text)
 
     # cv2.namedWindow('image', cv2.WINDOW_NORMAL)
     # cv2.imshow('image',img)
