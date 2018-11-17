@@ -19,16 +19,25 @@ def readImgText(img, tesseractEnginePath):
 	text = pytesseract.image_to_string(img)
 	return text
 
+def preprocessImage(img_name):
+
+	# read the image
+	img = cv2.imread("%s%s" % (img_path, img_name))
+
+	# grayscale and binarization
+	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	# assumes white mode
+	ret,thresh = cv2.threshold(gray,240,255,cv2.THRESH_BINARY_INV)
+
+	img = thresh
+	return img
 
 
 if __name__ == '__main__':
 
-	for file in listdir(img_path):
-
-		img = cv2.imread("%s%s" % (img_path, file), 0)
-
-		text = pytesseract.image_to_string(img)
-
-		print("name: " , file)
-		print(text, "\n")
-		print("-----------------------------------------")
+        for file in listdir(img_path):
+        	img = preprocessImage(file)
+        	text = pytesseract.image_to_string(img)
+        	print("name: " , file)
+        	print(text, "\n")
+        	print("-----------------------------------------")
