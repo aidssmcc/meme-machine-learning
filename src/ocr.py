@@ -24,6 +24,8 @@ def preprocessImage(img_name):
 	# read the image
 	img = cv2.imread("%s%s" % (img_path, img_name))
 
+	# rescale
+
 	# grayscale and binarization
 	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 	# assumes white mode
