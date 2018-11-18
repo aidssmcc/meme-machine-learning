@@ -1,8 +1,10 @@
 import numpy as np
 import cv2
 import pytesseract
+from os import listdir
 
 img_path = "../res/images/"
+# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe"
 
 '''
 * readImgText takes a read cv2 image as an input, and a path to
@@ -10,17 +12,40 @@ img_path = "../res/images/"
 * The function returns the text it could read from the image. Assumes the
 * image is preprocessed and ready to read.
 '''
-def readImgText(img, tesseractEnginePath):
-	if tesseractEnginePath != "":
-		pytesseract.pytesseract.tesseract_cmd = tesseractEnginePath
+def readImgText(img, tesseractEnginePath = ""):
+    if tesseractEnginePath != "":
+        pytesseract.pytesseract.tesseract_cmd = tesseractEnginePath
 
-	text = pytesseract.image_to_string(img)
-	return text
+    if not img is None:
+        return None
+
+    text = pytesseract.image_to_string(img)
+    return text
+
+def preprocessImage(img_name):
+
+	# read the image
+    img = cv2.imread("%s%s" % (img_path, img_name))
+
+    if not img is None:
+        return None
+
+	# grayscale and binarization
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	# assumes white mode
+    ret,thresh = cv2.threshold(gray,240,255,cv2.THRESH_BINARY_INV)
+
+	# noise reduction
+    thresh = cv2.fastNlMeansDenoising(thresh, None, h=50)
+
+    img = thresh
+    return img
+
 
 if __name__ == '__main__':
-	img = cv2.imread("%stest/testocr.png" % img_path , 0)
-
-	tesseractpath = "C:\\Program Files (x86)\\Tesseract-OCR"
-	text = pytesseract.image_to_string(img)
-
-	print(text)
+    for file in listdir(img_path):
+    	img = preprocessImage(file)
+    	text = readImgText(img)
+    	print("name: " , file)
+    	print(text, "\n")
+    	print("-----------------------------------------")

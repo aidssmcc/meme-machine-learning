@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<meta name="description" content="'Meme Machine Learning' project for 2018 CodeJam.">
+		<link href="style_MMF.css" rel="stylesheet" type="text/css">	
+		<link rel="icon" href="./img/pika_icon.PNG">
+		<title>MML: Meme Machine Learning</title>
+	</head>
+
+	<body>
+
+		<header>
+			<div class="container">
+				<div id="branding">
+					<h1>Aidan Sullivan, Emile Brulé-Champagne, Nathan Ladd, Stefano Commodari</h1>
+				</div>
+
+			</div>
+		</header>
+
+		<section id="showcase">
+			<div class="container">
+				<h1>MEME LEARNING MACHINE</h1>
+				<p>Using Computer Vision to Recognize your Memes !</p>
+			</div>
+		</section>
+
+		<section>
+			<div class="container">
+				<div class="card">
+					<p>Add an image and we'll read it and tell you its template. </p>
+
+					<form action="../cgi-bin/ocr_MMF.py" method="post" enctype="multipart/form-data">
+   					<fieldset>
+        			<input type="file" name="filename" id="picture" />
+    				</fieldset>
+    				<input type="submit" value="Let's Go!">
+					</form>
+				</div>
+
+				<h3>Thank You...</h3>
+				<ul>
+					<li>Library of Congress for the Meme Generator Data Set</li>
+					<li>ECSESS and the Sponsors for the CodeJam and Experience</li>
+				</ul>
+			</div>
+		</section>
+
+		<footer>
+			<section>
+			</section>
+		</footer>
+
+	</body>
+
+</html>
