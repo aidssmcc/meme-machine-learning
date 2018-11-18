@@ -24,12 +24,13 @@ def preprocessImage(img_name):
 	# read the image
 	img = cv2.imread("%s%s" % (img_path, img_name))
 
-	# rescale
-
 	# grayscale and binarization
 	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 	# assumes white mode
 	ret,thresh = cv2.threshold(gray,240,255,cv2.THRESH_BINARY_INV)
+
+	# noise reduction
+	thresh = cv2.fastNlMeansDenoising(thresh, None, h=50)
 
 	img = thresh
 	return img
